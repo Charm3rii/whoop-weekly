@@ -3,87 +3,204 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WHOOP 周总结</title>
 <style>
+:root{
+  --bg:#0a0c10; --card:#14171e; --card2:#1a1e27; --line:#262b36; --grid:#222733;
+  --tx:#eef1f6; --tx2:#99a1ad; --tx3:#5c6573;
+  --g:#1fe08a; --y:#ffb43a; --r:#ff5a5f;
+  --rec:#1fe08a; --strain:#35c0ff; --sleep:#a78bfa; --hrv:#35c0ff; --rhr:#ff9566;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","PingFang SC",Inter,"Helvetica Neue",sans-serif;
+  --fnum:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0e0e14;color:#e8e8f0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:16px;max-width:760px;margin:0 auto}
-h1{font-size:20px;text-align:center;margin-bottom:4px}
-.sub{text-align:center;color:#8a8a9a;font-size:12px;margin-bottom:18px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
-.stat{background:#1a1a24;border-radius:12px;padding:12px 8px;text-align:center}
-.stat .n{font-size:22px;font-weight:700}
-.stat .l{font-size:11px;color:#8a8a9a;margin-top:3px}
-.card{background:#1a1a24;border-radius:14px;padding:16px;margin-bottom:16px}
-.card h2{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.legend{font-size:11px;color:#8a8a9a;margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.legend span{display:inline-flex;align-items:center;gap:4px}
-.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+body{background:var(--bg);color:var(--tx);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;padding:22px 15px 40px;max-width:720px;margin:0 auto;line-height:1.5;
+  font-variant-numeric:tabular-nums}
+.head{margin-bottom:16px}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rec);font-weight:700}
+h1{font-size:24px;font-weight:680;letter-spacing:-.02em;margin:5px 0 3px}
+.range{color:var(--tx2);font-size:13px;font-family:var(--fnum)}
+.tabs{display:flex;background:#12151c;border:1px solid var(--line);border-radius:14px;padding:4px;gap:3px;
+  position:sticky;top:8px;z-index:9;margin-bottom:18px}
+.tabs button{flex:1;border:none;background:transparent;color:var(--tx2);font-size:13px;font-weight:600;
+  padding:9px 4px;border-radius:10px;cursor:pointer;transition:.18s;font-family:inherit;letter-spacing:.01em}
+.tabs button.on{background:#262c38;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.panel{display:none;animation:fade .25s ease}
+.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:12px}
+.h{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px 13px}
+.h .cap{font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:6px;font-weight:500}
+.h .cap i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.h .big{font-size:30px;font-weight:650;letter-spacing:-.02em;margin-top:9px;line-height:1;font-family:var(--fnum)}
+.h .big small{font-size:13px;font-weight:600;color:var(--tx3);margin-left:2px}
+.h .note{font-size:11.5px;color:var(--tx3);margin-top:7px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:16px}
+.mini div{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 12px}
+.mini .k{font-size:11.5px;color:var(--tx2)}
+.mini .v{font-size:17px;font-weight:620;margin-top:3px;letter-spacing:-.01em;font-family:var(--fnum)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:17px 16px 14px;margin-bottom:14px}
+.card h2{font-size:14.5px;font-weight:650;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.card h2 .tag{width:7px;height:15px;border-radius:4px;display:inline-block}
+.card .desc{font-size:11.5px;color:var(--tx3);margin-bottom:12px}
 svg{width:100%;height:auto;display:block}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:7px 4px;text-align:center;border-bottom:1px solid #2a2a36}
-th{color:#8a8a9a;font-weight:600}
-td.d{color:#aaa;white-space:nowrap}
-.z-g{color:#00e676}.z-y{color:#ffd54f}.z-r{color:#ff5252}
-.foot{text-align:center;color:#6a6a7a;font-size:11px;margin-top:10px;line-height:1.6}
-.ins{background:#14141c;border-left:3px solid #4a9eff;border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.7;color:#c8c8d4}
-.ins b{color:#fff}
+svg text{font-family:var(--fnum)}
+.legend{font-size:11.5px;color:var(--tx2);margin-top:10px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.drow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.drow:last-child{border-bottom:none}
+.drow .dt{width:44px;color:var(--tx2);font-weight:650;font-size:12.5px;flex:none;font-family:var(--fnum)}
+.drow .bar{flex:1;height:9px;border-radius:999px;background:#1f242f;overflow:hidden}
+.drow .bar i{display:block;height:100%;border-radius:999px}
+.drow .rt{flex:none;text-align:right;font-weight:650;font-size:12.5px;font-family:var(--fnum)}
+.drow .sub{color:var(--tx3);font-weight:500;font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:10px 5px;text-align:center;border-bottom:1px solid var(--line)}
+th{color:var(--tx3);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase}
+tr:last-child td{border-bottom:none}
+td.d{color:var(--tx2);white-space:nowrap;font-weight:650;text-align:left}
+td.n{font-family:var(--fnum)}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;font-size:11.5px;font-family:var(--fnum)}
+.ins .row{display:flex;gap:9px;margin-bottom:9px;font-size:13.5px;line-height:1.75}
+.ins .row:last-child{margin-bottom:0}
+.ins .mk{color:var(--rec);font-weight:800;flex:none}
+.ins b{font-weight:700;color:#fff}
 </style></head><body>
-<h1>⌚ WHOOP 周总结</h1>
-<div class="sub">2026-10-27 ~ 2026-11-02 · 共 7 天</div>
-<div class="stats" id="stats"></div>
-<div class="card"><h2>🔋 恢复度走势</h2><svg id="recChart" viewBox="0 0 700 260"></svg>
-<div class="legend"><span><i class="dot" style="background:#00e676"></i>绿 ≥67</span><span><i class="dot" style="background:#ffd54f"></i>黄 34-66</span><span><i class="dot" style="background:#ff5252"></i>红 &lt;34</span></div></div>
-<div class="card"><h2>😴 睡眠时长（小时）</h2><svg id="sleepChart" viewBox="0 0 700 220"></svg></div>
-<div class="card"><h2>❤️ HRV 与静息心率</h2><svg id="hrChart" viewBox="0 0 700 240"></svg>
-<div class="legend"><span><i class="dot" style="background:#4a9eff"></i>HRV(ms) 越高越好</span><span><i class="dot" style="background:#ff8a65"></i>静息心率(bpm) 越低越好</span></div></div>
-<div class="card"><h2>📋 每日明细</h2><div style="overflow-x:auto"><table id="tbl"></table></div></div>
-<div class="card"><h2>💡 本周小结</h2><div class="ins" id="insight"></div></div>
-<div class="foot">数据来源 WHOOP API · 小亿自动整理 · 2026-11-02 15:00</div>
+<div class="head">
+  <div class="kicker">Weekly Summary</div>
+  <h1>WHOOP 周总结</h1>
+  <div class="range">2026-10-27 ~ 2026-11-02 · 共 7 天</div>
+</div>
+<div class="tabs">
+  <button class="on" data-t="ov">概览</button>
+  <button data-t="rec">恢复</button>
+  <button data-t="slp">睡眠</button>
+  <button data-t="str">负荷</button>
+</div>
+
+<div class="panel on" id="p-ov">
+  <div class="hero" id="hero"></div>
+  <div class="mini" id="mini"></div>
+  <div class="card"><h2><span class="tag" style="background:var(--rec)"></span>本周小结</h2><div class="ins" id="insight"></div></div>
+  <div class="card"><h2><span class="tag" style="background:#6b7280"></span>每日明细</h2><div style="overflow-x:auto"><table id="tbl"></table></div></div>
+</div>
+
+<div class="panel" id="p-rec">
+  <div class="card"><h2><span class="tag" style="background:var(--rec)"></span>恢复度走势</h2>
+    <div class="desc">身体每天的恢复状态，越高越适合高强度训练</div>
+    <svg id="recChart" viewBox="0 0 700 250"></svg>
+    <div class="legend"><span><i class="dot" style="background:var(--g)"></i>充沛 ≥67</span><span><i class="dot" style="background:var(--y)"></i>一般 34–66</span><span><i class="dot" style="background:var(--r)"></i>疲劳 &lt;34</span></div>
+  </div>
+  <div class="card"><h2><span class="tag" style="background:var(--hrv)"></span>HRV 与静息心率</h2>
+    <div class="desc">HRV 越高、静息心率越低，通常代表恢复越好</div>
+    <svg id="hrChart" viewBox="0 0 700 235"></svg>
+    <div class="legend"><span><i class="dot" style="background:var(--hrv)"></i>HRV（ms）</span><span><i class="dot" style="background:var(--rhr)"></i>静息心率（bpm）</span></div>
+  </div>
+  <div class="card"><h2><span class="tag" style="background:var(--rec)"></span>恢复明细</h2><div id="recList"></div></div>
+</div>
+
+<div class="panel" id="p-slp">
+  <div class="card"><h2><span class="tag" style="background:var(--sleep)"></span>睡眠时长</h2>
+    <div class="desc">每日实际睡眠，虚线为 7 小时参考</div>
+    <svg id="sleepChart" viewBox="0 0 700 215"></svg>
+  </div>
+  <div class="card"><h2><span class="tag" style="background:var(--sleep)"></span>睡眠明细</h2>
+    <div class="desc">横条为睡眠时长（满格 9h），右侧为睡眠表现 / 效率</div>
+    <div id="slpList"></div>
+  </div>
+</div>
+
+<div class="panel" id="p-str">
+  <div class="card"><h2><span class="tag" style="background:var(--strain)"></span>运动负荷走势</h2>
+    <div class="desc">WHOOP Strain 0–21，数值越高当天身体负荷越大</div>
+    <svg id="strChart" viewBox="0 0 700 215"></svg>
+  </div>
+  <div class="card"><h2><span class="tag" style="background:var(--strain)"></span>负荷明细</h2>
+    <div class="desc">横条为当日 Strain（满格 21）</div>
+    <div id="strList"></div>
+  </div>
+</div>
 <script>
 const D=[{"date": "10-27", "rec": 26, "zone": "r", "strain": 11.3, "slp": 31, "rhr": 49, "hrv": 55.6, "spo2": 88.2, "sh": 3.34, "eff": 95.7}, {"date": "10-28", "rec": 43, "zone": "y", "strain": 7.3, "slp": 46, "rhr": 59, "hrv": 40.3, "spo2": 92.8, "sh": 7.32, "eff": 70.2}, {"date": "10-29", "rec": 73, "zone": "g", "strain": 10.5, "slp": 78, "rhr": 53, "hrv": 55.0, "spo2": 89.7, "sh": 7.49, "eff": 98.5}, {"date": "10-30", "rec": 84, "zone": "g", "strain": 18.6, "slp": 77, "rhr": 51, "hrv": 62.3, "spo2": 90.6, "sh": 7.07, "eff": 95.3}, {"date": "10-31", "rec": 37, "zone": "y", "strain": 11.5, "slp": 67, "rhr": 55, "hrv": 42.0, "spo2": 92.9, "sh": 5.5, "eff": 89.3}, {"date": "11-01", "rec": 87, "zone": "g", "strain": 5.0, "slp": 77, "rhr": 54, "hrv": 62.5, "spo2": 92.8, "sh": 7.86, "eff": 91.8}, {"date": "11-02", "rec": 40, "zone": "y", "strain": 4.3, "slp": 77, "rhr": 53, "hrv": 41.3, "spo2": 95.8, "sh": 7.61, "eff": 92.3}];
-const ZC={g:"#00e676",y:"#ffd54f",r:"#ff5252",n:"#888"};
-const has=a=>a.filter(x=>x!=null);
+const cs=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const C={g:cs('--g'),y:cs('--y'),r:cs('--r'),rec:cs('--rec'),strain:cs('--strain'),sleep:cs('--sleep'),hrv:cs('--hrv'),rhr:cs('--rhr'),grid:cs('--grid'),tx2:cs('--tx2'),tx3:cs('--tx3')};
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const h2hm=h=>{if(h==null)return "—";const m=Math.round(h*60);return Math.floor(m/60)+"h"+String(m%60).padStart(2,"0")+"m"};
-const avgRec=Math.round(avg(has(D.map(d=>d.rec))));
-const shArr=has(D.map(d=>d.sh));const avgSh=avg(shArr);
-const avgHrv=avg(has(D.map(d=>d.hrv))).toFixed(0);
-const best=D.reduce((a,b)=>b.rec>a.rec?b:a);
-document.getElementById("stats").innerHTML=[
-["平均恢复",avgRec+"%",avgRec>=67?"z-g":avgRec>=34?"z-y":"z-r"],
-["平均睡眠",h2hm(avgSh),""],["平均HRV",avgHrv+"ms",""],["最佳日",best.date,"z-g"]
-].map(s=>`<div class="stat"><div class="n ${s[2]}">${s[1]}</div><div class="l">${s[0]}</div></div>`).join("");
-const PL=44,PR=16,PT=16;
-const xpos=(i,w)=>D.length<2?(PL+(w-PL-PR)/2):PL+(w-PL-PR)*i/(D.length-1);
-(function(){const W=700,H=260,PB=34,top=PT,bot=H-PB,y=v=>top+(bot-top)*(1-v/100);let s="";
-[[67,100,"#00e67622"],[34,67,"#ffd54f18"],[0,34,"#ff525218"]].forEach(b=>{const y1=y(b[1]),y2=y(b[0]);s+=`<rect x="${PL}" y="${y1}" width="${W-PL-PR}" height="${y2-y1}" fill="${b[2]}"/>`;});
-[0,25,50,75,100].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="#2a2a36"/><text x="${PL-6}" y="${y(v)+4}" fill="#6a6a7a" font-size="11" text-anchor="end">${v}</text>`;});
-let pts=D.map((d,i)=>[xpos(i,W),y(d.rec)]);
-s+=`<polyline fill="none" stroke="#fff" stroke-width="2" stroke-opacity=".55" points="${pts.map(p=>p.join(",")).join(" ")}"/>`;
-D.forEach((d,i)=>{const[px,py]=pts[i];s+=`<circle cx="${px}" cy="${py}" r="5" fill="${ZC[d.zone]}" stroke="#0e0e14" stroke-width="2"/><text x="${px}" y="${py-11}" fill="${ZC[d.zone]}" font-size="12" font-weight="700" text-anchor="middle">${d.rec}</text><text x="${px}" y="${H-12}" fill="#8a8a9a" font-size="11" text-anchor="middle">${d.date}</text>`;});
-document.getElementById("recChart").innerHTML=s;})();
-(function(){const W=700,H=220,PB=30,top=PT,bot=H-PB,mx=10,y=v=>top+(bot-top)*(1-v/mx);let s="";
-[0,2,4,6,8,10].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="#2a2a36"/><text x="${PL-6}" y="${y(v)+4}" fill="#6a6a7a" font-size="11" text-anchor="end">${v}</text>`;});
-const bw=(W-PL-PR)/D.length*0.56;
-D.forEach((d,i)=>{const cx=xpos(i,W);if(d.sh==null){s+=`<text x="${cx}" y="${bot-4}" fill="#555" font-size="10" text-anchor="middle">无</text>`;}else{const yy=y(d.sh),h=bot-yy,col=d.sh>=7?"#4a9eff":d.sh>=5?"#9a7cff":"#ff7eb0";s+=`<rect x="${cx-bw/2}" y="${yy}" width="${bw}" height="${h}" rx="4" fill="${col}"/><text x="${cx}" y="${yy-6}" fill="#c8c8d4" font-size="11" font-weight="600" text-anchor="middle">${h2hm(d.sh)}</text>`;}s+=`<text x="${cx}" y="${H-10}" fill="#8a8a9a" font-size="11" text-anchor="middle">${d.date}</text>`;});
-s+=`<line x1="${PL}" y1="${y(7)}" x2="${W-PR}" y2="${y(7)}" stroke="#4a9eff" stroke-dasharray="4 4" stroke-opacity=".6"/><text x="${W-PR}" y="${y(7)-5}" fill="#4a9eff" font-size="10" text-anchor="end">7h 参考</text>`;
-document.getElementById("sleepChart").innerHTML=s;})();
-(function(){const W=700,H=240,PB=34,top=PT,bot=H-PB;const hM=70,hm=35,rM=62,rm=46;
-const yH=v=>top+(bot-top)*(1-(v-hm)/(hM-hm)),yR=v=>top+(bot-top)*(1-(v-rm)/(rM-rm));let s="";
-[35,45,55,65].forEach(v=>{s+=`<line x1="${PL}" y1="${yH(v)}" x2="${W-PR}" y2="${yH(v)}" stroke="#2a2a36"/><text x="${PL-6}" y="${yH(v)+4}" fill="#4a9eff" font-size="10" text-anchor="end">${v}</text>`;});
-let ph=D.map((d,i)=>[xpos(i,W),yH(d.hrv)]),pr=D.map((d,i)=>[xpos(i,W),yR(d.rhr)]);
-s+=`<polyline fill="none" stroke="#4a9eff" stroke-width="2" points="${ph.map(p=>p.join(",")).join(" ")}"/>`;
-s+=`<polyline fill="none" stroke="#ff8a65" stroke-width="2" points="${pr.map(p=>p.join(",")).join(" ")}"/>`;
-D.forEach((d,i)=>{s+=`<circle cx="${ph[i][0]}" cy="${ph[i][1]}" r="4" fill="#4a9eff"/><text x="${ph[i][0]}" y="${ph[i][1]-9}" fill="#4a9eff" font-size="10" text-anchor="middle">${d.hrv}</text><circle cx="${pr[i][0]}" cy="${pr[i][1]}" r="4" fill="#ff8a65"/><text x="${pr[i][0]}" y="${pr[i][1]+16}" fill="#ff8a65" font-size="10" text-anchor="middle">${d.rhr}</text><text x="${xpos(i,W)}" y="${H-12}" fill="#8a8a9a" font-size="11" text-anchor="middle">${d.date}</text>`;});
-document.getElementById("hrChart").innerHTML=s;})();
-(function(){const zc={g:"z-g",y:"z-y",r:"z-r",n:""},zt={g:"🟢",y:"🟡",r:"🔴",n:"⚪"};
-let s=`<tr><th>日期</th><th>恢复</th><th>睡眠</th><th>时长</th><th>效率</th><th>HRV</th><th>RHR</th><th>血氧</th></tr>`;
-D.forEach(d=>{s+=`<tr><td class="d">${d.date}</td><td class="${zc[d.zone]}">${zt[d.zone]}${d.rec}%</td><td>${d.slp==null?"—":d.slp+"%"}</td><td>${h2hm(d.sh)}</td><td>${d.eff==null?"—":d.eff+"%"}</td><td>${d.hrv}</td><td>${d.rhr}</td><td>${d.spo2}%</td></tr>`;});
-document.getElementById("tbl").innerHTML=s;})();
-(function(){const worst=D.reduce((a,b)=>b.rec<a.rec?b:a);
-const sv=D.filter(d=>d.sh!=null);const bestS=sv.reduce((a,b)=>b.sh>a.sh?b:a,sv[0]||{sh:0,date:"—"});const worstS=sv.reduce((a,b)=>b.sh<a.sh?b:a,sv[0]||{sh:0,date:"—"});
+const g=n=>(+n).toFixed(1);
+const md=d=>d.date.slice(3);
+const hv=a=>a.filter(x=>x!=null);
+const avgRec=Math.round(avg(hv(D.map(d=>d.rec)))),avgStrain=g(avg(hv(D.map(d=>d.strain)))),avgPerf=Math.round(avg(hv(D.map(d=>d.slp))));
+const avgSh=avg(hv(D.map(d=>d.sh))),avgHrv=Math.round(avg(hv(D.map(d=>d.hrv)))),avgRhr=Math.round(avg(hv(D.map(d=>d.rhr))));
+const best=D.reduce((a,b)=>b.rec>a.rec?b:a),worst=D.reduce((a,b)=>b.rec<a.rec?b:a);
 const green=D.filter(d=>d.zone==="g").length,red=D.filter(d=>d.zone==="r").length;
-document.getElementById("insight").innerHTML=
-`· 本周 ${D.length} 天平均恢复度 <b>${avgRec}%</b>（${avgRec>=67?"绿色·状态好":avgRec>=34?"黄色·一般":"红色·偏疲劳"}）；其中绿区 <b>${green}</b> 天、红区 <b>${red}</b> 天。<br>`+
-`· 最佳 <b>${best.date}（${best.rec}%）</b>，最差 <b>${worst.date}（${worst.rec}%）</b>。<br>`+
-`· 睡眠平均 <b>${h2hm(avgSh)}</b>，最长 <b>${h2hm(bestS.sh)}（${bestS.date}）</b>，最短 <b>${h2hm(worstS.sh)}（${worstS.date}）</b>。<br>`+
-`<b>规律：睡够 7 小时的第二天，恢复度通常明显更高。稳定作息、睡满 7h 是最直接的提升办法。</b>`;})();
+
+document.getElementById("hero").innerHTML=[
+ ["恢复度",C.rec,avgRec+'<small>%</small>',avgRec>=67?"状态充沛":avgRec>=34?"一般":"偏疲劳"],
+ ["运动负荷",C.strain,avgStrain+'<small>/21</small>',"日均 Strain"],
+ ["睡眠表现",C.sleep,avgPerf+'<small>%</small>',"周均"]
+].map(h=>`<div class="h"><div class="cap"><i style="background:${h[1]}"></i>${h[0]}</div><div class="big" style="color:${h[1]}">${h[2]}</div><div class="note">${h[3]}</div></div>`).join("");
+document.getElementById("mini").innerHTML=[["平均睡眠",h2hm(avgSh)],["平均 HRV",avgHrv+" ms"],["平均静息心率",avgRhr+" bpm"]]
+ .map(m=>`<div><div class="k">${m[0]}</div><div class="v">${m[1]}</div></div>`).join("");
+(function(){const sv=D.filter(d=>d.sh!=null),bestS=sv.reduce((a,b)=>b.sh>a.sh?b:a,sv[0]),worstS=sv.reduce((a,b)=>b.sh<a.sh?b:a,sv[0]);
+ const rows=[
+  `本周平均恢复度 <b>${avgRec}%</b>（${avgRec>=67?"充沛":avgRec>=34?"一般":"偏疲劳"}）：绿区 <b>${green}</b> 天、红区 <b>${red}</b> 天。`,
+  `最佳 <b>${best.date}（${best.rec}%）</b>，最差 <b>${worst.date}（${worst.rec}%）</b>。`,
+  `睡眠平均 <b>${h2hm(avgSh)}</b>，最长 <b>${h2hm(bestS.sh)}（${bestS.date}）</b>，最短 <b>${h2hm(worstS.sh)}（${worstS.date}）</b>。`,
+  `规律：<b>睡满 7 小时的第二天恢复度通常明显更高</b>；睡不够就掉到黄 / 红区。稳定作息、睡满 7h，是拉高恢复度最直接的办法。`
+ ];
+ document.getElementById("insight").innerHTML=rows.map(r=>`<div class="row"><span class="mk">—</span><span>${r}</span></div>`).join("");})();
+(function(){const zt={g:C.g,y:C.y,r:C.r};
+ let s=`<tr><th style="text-align:left">日期</th><th>恢复</th><th>睡眠</th><th>时长</th><th>HRV</th><th>RHR</th><th>血氧</th></tr>`;
+ D.forEach(d=>{s+=`<tr><td class="d">${d.date}</td><td><span class="pill" style="background:${zt[d.zone]}24;color:${zt[d.zone]}">${d.rec}%</span></td><td class="n">${d.slp==null?"—":d.slp+"%"}</td><td class="n">${h2hm(d.sh)}</td><td class="n">${d.hrv}</td><td class="n">${d.rhr}</td><td class="n">${d.spo2}%</td></tr>`;});
+ document.getElementById("tbl").innerHTML=s;})();
+
+const PL=42,PR=18,PT=18;
+const xpos=(i,w)=>D.length<2?(PL+(w-PL-PR)/2):PL+(w-PL-PR)*i/(D.length-1);
+
+(function(){const W=700,H=250,PB=30,top=PT,bot=H-PB,y=v=>top+(bot-top)*(1-v/100);let s="";
+ [[67,100,C.g],[34,67,C.y],[0,34,C.r]].forEach(b=>{s+=`<rect x="${PL}" y="${y(b[1])}" width="${W-PL-PR}" height="${y(b[0])-y(b[1])}" fill="${b[2]}" opacity=".08"/>`;});
+ [0,25,50,75,100].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="${C.grid}"/><text x="${PL-8}" y="${y(v)+4}" fill="${C.tx3}" font-size="11" text-anchor="end">${v}</text>`;});
+ const pts=D.map((d,i)=>[xpos(i,W),y(d.rec)]);
+ s+=`<polygon points="${pts[0][0]},${bot} ${pts.map(p=>g(p[0])+","+g(p[1])).join(" ")} ${pts[pts.length-1][0]},${bot}" fill="${C.rec}" opacity=".10"/>`;
+ s+=`<polyline fill="none" stroke="${C.rec}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="${pts.map(p=>g(p[0])+","+g(p[1])).join(" ")}"/>`;
+ D.forEach((d,i)=>{const[px,py]=pts[i];s+=`<circle cx="${g(px)}" cy="${g(py)}" r="5.5" fill="var(--bg)" stroke="${C[d.zone]}" stroke-width="2.6"/><text x="${g(px)}" y="${py-12}" fill="${C[d.zone]}" font-size="12.5" font-weight="700" text-anchor="middle">${d.rec}</text><text x="${g(px)}" y="${H-10}" fill="${C.tx2}" font-size="11" text-anchor="middle">${md(d)}</text>`;});
+ document.getElementById("recChart").innerHTML=s;})();
+
+(function(){const W=700,H=235,PB=30,top=PT,bot=H-PB,hM=70,hm=35,rM=62,rm=46;
+ const yH=v=>top+(bot-top)*(1-(v-hm)/(hM-hm)),yR=v=>top+(bot-top)*(1-(v-rm)/(rM-rm));let s="";
+ [35,45,55,65].forEach(v=>{s+=`<line x1="${PL}" y1="${yH(v)}" x2="${W-PR}" y2="${yH(v)}" stroke="${C.grid}"/><text x="${PL-8}" y="${yH(v)+4}" fill="${C.tx3}" font-size="10.5" text-anchor="end">${v}</text>`;});
+ const ph=D.map((d,i)=>[xpos(i,W),yH(d.hrv)]),pr=D.map((d,i)=>[xpos(i,W),yR(d.rhr)]);
+ s+=`<polyline fill="none" stroke="${C.hrv}" stroke-width="2.6" stroke-linejoin="round" points="${ph.map(p=>g(p[0])+","+g(p[1])).join(" ")}"/>`;
+ s+=`<polyline fill="none" stroke="${C.rhr}" stroke-width="2.6" stroke-linejoin="round" points="${pr.map(p=>g(p[0])+","+g(p[1])).join(" ")}"/>`;
+ D.forEach((d,i)=>{s+=`<circle cx="${g(ph[i][0])}" cy="${g(ph[i][1])}" r="4" fill="var(--bg)" stroke="${C.hrv}" stroke-width="2"/><text x="${g(ph[i][0])}" y="${ph[i][1]-9}" fill="${C.hrv}" font-size="10.5" text-anchor="middle">${d.hrv}</text><circle cx="${g(pr[i][0])}" cy="${g(pr[i][1])}" r="4" fill="var(--bg)" stroke="${C.rhr}" stroke-width="2"/><text x="${g(pr[i][0])}" y="${pr[i][1]+16}" fill="${C.rhr}" font-size="10.5" text-anchor="middle">${d.rhr}</text><text x="${g(xpos(i,W))}" y="${H-9}" fill="${C.tx2}" font-size="11" text-anchor="middle">${md(d)}</text>`;});
+ document.getElementById("hrChart").innerHTML=s;})();
+
+document.getElementById("recList").innerHTML=D.map(d=>{const c=C[d.zone];
+ return `<div class="drow"><span class="dt">${md(d)}</span><div class="bar"><i style="width:${d.rec}%;background:${c}"></i></div><span class="rt" style="width:104px"><span style="color:${c}">${d.rec}%</span> <span class="sub">H${d.hrv} R${d.rhr}</span></span></div>`;}).join("");
+
+(function(){const W=700,H=215,PB=28,top=PT,bot=H-PB,mx=10,y=v=>top+(bot-top)*(1-v/mx);let s="";
+ [0,2,4,6,8,10].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="${C.grid}"/><text x="${PL-8}" y="${y(v)+4}" fill="${C.tx3}" font-size="11" text-anchor="end">${v}</text>`;});
+ const bw=Math.min(40,(W-PL-PR)/D.length*0.5);
+ D.forEach((d,i)=>{const cx=xpos(i,W);if(d.sh==null){s+=`<text x="${g(cx)}" y="${bot-4}" fill="#555" font-size="10" text-anchor="middle">无</text>`;}else{const yy=y(d.sh),h=bot-yy,col=d.sh>=7?C.sleep:d.sh>=5?"#8f7ce8":"#b9a9f0";s+=`<rect x="${g(cx-bw/2)}" y="${g(yy)}" width="${bw}" height="${g(h)}" rx="6" fill="${col}"/><text x="${g(cx)}" y="${yy-7}" fill="${C.tx2}" font-size="11" font-weight="600" text-anchor="middle">${h2hm(d.sh)}</text>`;}s+=`<text x="${g(cx)}" y="${H-9}" fill="${C.tx2}" font-size="11" text-anchor="middle">${md(d)}</text>`;});
+ s+=`<line x1="${PL}" y1="${y(7)}" x2="${W-PR}" y2="${y(7)}" stroke="${C.sleep}" stroke-dasharray="5 4" opacity=".6"/><text x="${W-PR}" y="${y(7)-6}" fill="${C.sleep}" font-size="10.5" text-anchor="end">7h</text>`;
+ document.getElementById("sleepChart").innerHTML=s;})();
+
+document.getElementById("slpList").innerHTML=D.map(d=>{if(d.sh==null)return `<div class="drow"><span class="dt">${md(d)}</span><div class="bar"></div><span class="rt" style="width:140px">—</span></div>`;const w=Math.min(100,d.sh/9*100),col=d.sh>=7?C.sleep:d.sh>=5?"#8f7ce8":"#b9a9f0";
+ return `<div class="drow"><span class="dt">${md(d)}</span><div class="bar"><i style="width:${w}%;background:${col}"></i></div><span class="rt" style="width:140px">${h2hm(d.sh)} <span class="sub">表现${d.slp==null?"—":d.slp+"%"} 效率${d.eff==null?"—":d.eff+"%"}</span></span></div>`;}).join("");
+
+(function(){const W=700,H=215,PB=28,top=PT,bot=H-PB,mx=21,y=v=>top+(bot-top)*(1-v/mx);let s="";
+ [0,7,14,21].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="${C.grid}"/><text x="${PL-8}" y="${y(v)+4}" fill="${C.tx3}" font-size="11" text-anchor="end">${v}</text>`;});
+ const bw=Math.min(40,(W-PL-PR)/D.length*0.5);
+ D.forEach((d,i)=>{const cx=xpos(i,W),yy=y(d.strain),h=bot-yy,col=d.strain>=14?"#1f9bff":d.strain>=8?C.strain:"#7fd6ff";
+  s+=`<rect x="${g(cx-bw/2)}" y="${g(yy)}" width="${bw}" height="${g(h)}" rx="6" fill="${col}"/><text x="${g(cx)}" y="${yy-7}" fill="${C.tx2}" font-size="11" font-weight="600" text-anchor="middle">${g(d.strain)}</text><text x="${g(cx)}" y="${H-9}" fill="${C.tx2}" font-size="11" text-anchor="middle">${md(d)}</text>`;});
+ document.getElementById("strChart").innerHTML=s;})();
+
+document.getElementById("strList").innerHTML=D.map(d=>{const w=Math.min(100,d.strain/21*100),col=d.strain>=14?"#1f9bff":d.strain>=8?C.strain:"#7fd6ff";
+ return `<div class="drow"><span class="dt">${md(d)}</span><div class="bar"><i style="width:${w}%;background:${col}"></i></div><span class="rt" style="width:78px">${g(d.strain)} <span class="sub">/21</span></span></div>`;}).join("");
+
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("on"));
+ document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
+ b.classList.add("on");document.getElementById("p-"+b.dataset.t).classList.add("on");
+}));
 </script></body></html>
