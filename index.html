@@ -65,6 +65,9 @@ td.n{font-family:var(--fnum)}
 .ins .row:last-child{margin-bottom:0}
 .ins .mk{color:var(--rec);font-weight:800;flex:none}
 .ins b{font-weight:700;color:#fff}
+.recnote{margin-top:2px;background:#12151c;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.7;color:var(--tx2);display:flex;gap:9px}
+.recnote .mk{color:var(--rec);font-weight:800;flex:none}
+.recnote b{color:#fff;font-weight:650;font-family:var(--fnum)}
 </style></head><body>
 <div class="head">
   <div class="kicker">Weekly Summary</div>
@@ -97,6 +100,7 @@ td.n{font-family:var(--fnum)}
     <div class="legend"><span><i class="dot" style="background:var(--hrv)"></i>HRV（ms）</span><span><i class="dot" style="background:var(--rhr)"></i>静息心率（bpm）</span></div>
   </div>
   <div class="card"><h2><span class="tag" style="background:var(--rec)"></span>恢复明细</h2><div id="recList"></div></div>
+  <div class="recnote" id="recNote"></div>
 </div>
 
 <div class="panel" id="p-slp">
@@ -177,6 +181,16 @@ const xpos=(i,w)=>D.length<2?(PL+(w-PL-PR)/2):PL+(w-PL-PR)*i/(D.length-1);
 
 document.getElementById("recList").innerHTML=D.map(d=>{const c=C[d.zone];
  return `<div class="drow"><span class="dt">${md(d)}</span><div class="bar"><i style="width:${d.rec}%;background:${c}"></i></div><span class="rt" style="width:104px"><span style="color:${c}">${d.rec}%</span> <span class="sub">H${d.hrv} R${d.rhr}</span></span></div>`;}).join("");
+(function(){
+ const low=D.filter(d=>d.sh!=null&&d.sh<7).length;
+ let cause;
+ if(low>=Math.ceil(D.length/2)) cause=`本周有 <b>${low}</b> 天睡不足 7 小时，<b>睡眠不足</b>是拉低恢复的主因`;
+ else if(avgHrv<45) cause=`本周 HRV 平均偏低（<b>${avgHrv}ms</b>），身体压力偏大、恢复受限`;
+ else if(avgRhr>58) cause=`本周静息心率偏高（<b>${avgRhr}bpm</b>），多为疲劳或负荷偏大`;
+ else cause=`本周各项基本在正常区间，恢复相对稳定`;
+ const lever=low>0?`把“睡满 7h + 作息规律”做稳，是最直接的提升点。`:`保持当前作息，注意别让 HRV 掉下来。`;
+ document.getElementById("recNote").innerHTML=`<span class="mk">◆</span><span><b>恢复点评：</b>${cause}。${lever}</span>`;
+})();
 
 (function(){const W=700,H=215,PB=28,top=PT,bot=H-PB,mx=10,y=v=>top+(bot-top)*(1-v/mx);let s="";
  [0,2,4,6,8,10].forEach(v=>{s+=`<line x1="${PL}" y1="${y(v)}" x2="${W-PR}" y2="${y(v)}" stroke="${C.grid}"/><text x="${PL-8}" y="${y(v)+4}" fill="${C.tx3}" font-size="11" text-anchor="end">${v}</text>`;});
