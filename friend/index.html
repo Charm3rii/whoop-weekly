@@ -87,6 +87,28 @@ svg.ch text{font-family:var(--mono)}
 .note .t{font-weight:650;color:rgb(var(--glow));white-space:nowrap}
 .note .num{color:#fff}
 .still *{animation:none!important;transition:none!important}
+[hidden]{display:none!important}
+.sub{display:flex;background:var(--s1);border-radius:10px;padding:3px;margin-bottom:12px;box-shadow:inset 0 0 0 1px var(--hair)}
+.sub button{flex:1;border:0;background:none;color:var(--tx2);font:600 12.5px/1 var(--sans);padding:9px 0;border-radius:8px;cursor:pointer;transition:background .2s,color .2s}
+.sub button.on{background:#2a2e36;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.crow{padding:15px 0;border-top:1px solid var(--hair)}
+.crow:first-child{border-top:0}
+.crow .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crow .cl{font-size:13.5px;font-weight:600}
+.cd{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px}
+.cd.good{color:var(--g);background:rgba(31,224,138,.13)}
+.cd.bad{color:var(--r);background:rgba(255,90,95,.13)}
+.cd.neu{color:var(--strain);background:rgba(53,184,255,.13)}
+.cd.flat{color:var(--tx2);background:rgba(255,255,255,.07)}
+.crow .b{display:grid;grid-template-columns:28px 1fr 70px;gap:10px;align-items:center;margin-top:6px}
+.crow .b small{font-size:10.5px;color:var(--tx3)}
+.crow .b .t{position:relative;height:7px;border-radius:99px;background:rgba(255,255,255,.06)}
+.crow .b .t i{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.crow .b span{font-family:var(--mono);font-size:12.5px;font-weight:600;text-align:right}
+.crow .b.o .t i{background:rgba(255,255,255,.26)}
+.crow .b.o span{color:var(--tx3);font-weight:500}
+.trio .k i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+.trio .p{font-size:11px;color:var(--tx3);margin-top:3px}
 </style></head><body>
 <div class="glow"></div>
 <header>
@@ -99,11 +121,20 @@ svg.ch text{font-family:var(--mono)}
 </div></nav>
 
 <section class="panel on" id="p-ov">
+  <div class="sub" id="sub" hidden><button class="on" data-v="wk">本周</button><button data-v="cmp">周对比</button></div>
+  <div id="ovWeek">
   <div class="rings" id="rings"></div>
   <div class="trio" id="trio"></div>
   <div class="card verdict"><h3 id="vd"></h3><div class="chips" id="chips"></div></div>
   <div class="card"><div class="ttl"><h2>本周节奏</h2><span>颜色越亮，数值越高</span></div><div class="hm" id="hm"></div></div>
   <div class="card"><div class="ttl"><h2>本周小结</h2></div><ul class="ins" id="ins"></ul></div>
+</div>
+  <div id="ovCmp" hidden>
+    <div class="card verdict"><h3 id="cvd"></h3><div class="chips" id="cchips"></div></div>
+    <div class="rows" id="cmpRows"></div>
+    <div class="card"><div class="ttl"><h2>恢复度逐日对比</h2><span>实线本周 · 虚线上周</span></div><svg class="ch" id="cCmp"></svg></div>
+    <div class="trio" id="zdays"></div>
+  </div>
 </section>
 
 <section class="panel" id="p-rec">
@@ -131,6 +162,7 @@ svg.ch text{font-family:var(--mono)}
 <script>
 const D=[{"date": "11-02", "rec": 62, "zone": "y", "strain": 5.0, "slp": 73, "rhr": 65, "hrv": 47.2, "spo2": 94.8, "sh": 9.34, "eff": 84.5}, {"date": "11-03", "rec": 70, "zone": "g", "strain": 16.0, "slp": 63, "rhr": 61, "hrv": 54.3, "spo2": 94.2, "sh": 6.23, "eff": 83.4}, {"date": "11-04", "rec": 61, "zone": "y", "strain": 4.2, "slp": 71, "rhr": 61, "hrv": 48.3, "spo2": 95.0, "sh": 6.63, "eff": 89.0}, {"date": "11-05", "rec": 83, "zone": "g", "strain": 6.2, "slp": 63, "rhr": 60, "hrv": 56.7, "spo2": 92.1, "sh": 7.24, "eff": 82.2}, {"date": "11-06", "rec": 72, "zone": "g", "strain": 12.1, "slp": 76, "rhr": 61, "hrv": 53.8, "spo2": 94.9, "sh": 7.35, "eff": 89.9}, {"date": "11-07", "rec": 25, "zone": "r", "strain": 7.9, "slp": 41, "rhr": 73, "hrv": 34.4, "spo2": 95.3, "sh": 5.19, "eff": 84.9}, {"date": "11-08", "rec": 16, "zone": "r", "strain": 7.2, "slp": 33, "rhr": 75, "hrv": 36.6, "spo2": 94.2, "sh": 8.54, "eff": 61.3}];
 const RANGE="2026-11-02 ~ 2026-11-08 · 共 7 天";
+const P=[{"date": "10-28", "rec": 24, "zone": "r", "strain": 12.1, "slp": 73, "rhr": 78, "hrv": 27.5, "spo2": 92.2, "sh": 6.39, "eff": 91.9}, {"date": "10-29", "rec": 54, "zone": "y", "strain": 4.3, "slp": 80, "rhr": 64, "hrv": 46.0, "spo2": 96.0, "sh": 6.49, "eff": 94.3}, {"date": "10-30", "rec": 57, "zone": "y", "strain": 12.6, "slp": 73, "rhr": 63, "hrv": 50.2, "spo2": 95.2, "sh": 5.63, "eff": 88.5}, {"date": "10-31", "rec": 83, "zone": "g", "strain": 13.0, "slp": 79, "rhr": 58, "hrv": 65.5, "spo2": 90.2, "sh": 6.35, "eff": 92.7}, {"date": "11-01", "rec": 72, "zone": "g", "strain": 6.9, "slp": 81, "rhr": 60, "hrv": 54.6, "spo2": 94.3, "sh": 9.81, "eff": 89.7}];
 const $=id=>document.getElementById(id);
 const cv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const COL={g:cv('--g'),y:cv('--y'),r:cv('--r'),n:cv('--tx3'),strain:cv('--strain'),sleep:cv('--sleep'),hrv:cv('--hrv'),rhr:cv('--rhr'),tx2:cv('--tx2'),tx3:cv('--tx3')};
@@ -251,11 +283,45 @@ rows("lStr",d=>({fill:ok(d.strain)?`<i style="width:${Math.min(100,d.strain/21*1
  else c=`本周各项基本在正常区间，恢复相对稳定`;
  $("nRec").innerHTML=`<span class="t">点评</span><span>${c}。${low>0?"把“睡满 7h + 作息规律”做稳，是最直接的提升点。":"保持当前作息，留意 HRV 别往下掉。"}</span>`;})();
 
+/* 周对比 */
+const hasP=Array.isArray(P)&&P.length>=3;
+function setView(v){document.querySelectorAll(".sub button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));$("ovWeek").hidden=v!=="wk";$("ovCmp").hidden=v!=="cmp";}
+if(hasP){
+ $("sub").hidden=false;
+ document.querySelectorAll(".sub button").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.v)));
+ P.forEach(d=>{if(!d.zone)d.zone=zoneOf(d.rec);});
+ const PA={rec:avg(P.map(d=>d.rec)),str:avg(P.map(d=>d.strain)),slp:avg(P.map(d=>d.slp)),sh:avg(P.map(d=>d.sh)),hrv:avg(P.map(d=>d.hrv)),rhr:avg(P.map(d=>d.rhr))};
+ const pmd=d=>{const x=d.date.split("-").map(Number);return x[0]+"/"+String(x[1]).padStart(2,"0")};
+ const M=[["恢复度","rec",v=>r0(v)+"%",d=>r0(Math.abs(d))+" 点",2,1,WC],
+  ["睡眠时长","sh",hm,d=>Math.round(Math.abs(d)*60)+" 分钟",.17,1,COL.sleep],
+  ["睡眠表现","slp",v=>r0(v)+"%",d=>r0(Math.abs(d))+" 点",2,1,COL.sleep],
+  ["运动负荷","str",f1,d=>f1(Math.abs(d)),.5,0,COL.strain],
+  ["HRV","hrv",v=>r0(v)+" ms",d=>r0(Math.abs(d))+" ms",2,1,COL.hrv],
+  ["静息心率","rhr",v=>r0(v)+" bpm",d=>r0(Math.abs(d))+" bpm",1,-1,COL.rhr]];
+ let good=0,bad=0;
+ $("cmpRows").innerHTML=M.map(([lb,k,fm,dfm,thr,dir,col])=>{const a=A[k],b=PA[k];if(!ok(a)||!ok(b))return"";
+  const d=a-b;let cls="flat",txt="持平";
+  if(Math.abs(d)>=thr){txt=(d>0?"▲ ":"▼ ")+dfm(d);if(dir===0)cls="neu";else if(d*dir>0){cls="good";good++}else{cls="bad";bad++}}
+  const mx=Math.max(a,b)*1.12||1;
+  return `<div class="crow"><div class="top"><span class="cl">${lb}</span><span class="cd ${cls}">${txt}</span></div><div class="b"><small>本周</small><div class="t"><i style="width:${(a/mx*100).toFixed(1)}%;background:${col}"></i></div><span>${fm(a)}</span></div><div class="b o"><small>上周</small><div class="t"><i style="width:${(b/mx*100).toFixed(1)}%"></i></div><span>${fm(b)}</span></div></div>`;}).join("");
+ const dr=ok(A.rec)&&ok(PA.rec)?A.rec-PA.rec:null;
+ $("cvd").textContent=dr==null?"对比数据不足":dr>=3?"恢复比上周更好":dr<=-3?"恢复比上周有所回落":"恢复与上周基本持平";
+ $("cchips").innerHTML=`<span class="chip"><i style="background:${COL.g}"></i>变好 <b>${good}</b> 项</span><span class="chip"><i style="background:${COL.r}"></i>变差 <b>${bad}</b> 项</span><span class="chip">上周 <b>${pmd(P[0])} – ${pmd(P[P.length-1])}</b></span>`;
+ (function(){const H=232,T=24,B=H-38,y=v=>T+(B-T)*(1-v/100);let s="";
+  [0,100].forEach(v=>{s+=`<line x1="${PL}" x2="${W-PR}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.06)"/>`;});
+  [[34,COL.r],[67,COL.g]].forEach(([v,c])=>{s+=`<line x1="${PL}" x2="${W-PR}" y1="${y(v)}" y2="${y(v)}" stroke="${rgba(c,.35)}" stroke-dasharray="2 4"/><text x="${PL-6}" y="${y(v)+3.5}" fill="${rgba(c,.85)}" font-size="9.5" text-anchor="end">${v}</text>`;});
+  const PP=P.slice(0,N).map((d,i)=>ok(d.rec)?[X(i),y(d.rec)]:null).filter(Boolean),PT=D.map((d,i)=>ok(d.rec)?[X(i),y(d.rec),d]:null).filter(Boolean);
+  if(PP.length)s+=`<path d="${smooth(PP)}" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>`+PP.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="#08090b" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>`).join("");
+  if(PT.length)s+=`<path d="${smooth(PT)}" fill="none" stroke="${WC}" stroke-width="2.6" stroke-linecap="round"/>`+PT.map(([px,py,d])=>`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.5" fill="#08090b" stroke="${COL[d.zone]}" stroke-width="2.2"/><text x="${px.toFixed(1)}" y="${(py-12).toFixed(1)}" fill="${COL[d.zone]}" font-size="11.5" font-weight="600" text-anchor="middle">${d.rec}</text>`).join("");
+  put("cCmp",H,s+xlab(H));})();
+ $("zdays").innerHTML=[["g","绿区"],["y","黄区"],["r","红区"]].map(([z,tt])=>{const a=cnt(z),b=P.filter(d=>d.zone===z).length,d=a-b;
+  return `<div><div class="k"><i style="background:${COL[z]}"></i>${tt}</div><div class="v">${a}<small>天</small></div><div class="p">上周 ${b} 天${d?" · "+(d>0?"+":"")+d:""}</div></div>`;}).join("");
+}
 /* Tab 切换（支持 #rec / #slp / #str 直达） */
 if(location.search.indexOf('still')>-1)document.documentElement.classList.add('still');
 const tabs=[...document.querySelectorAll(".seg button")];
 function show(t){tabs.forEach(b=>b.classList.toggle("on",b.dataset.t===t));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t));}
 tabs.forEach(b=>b.addEventListener("click",()=>{show(b.dataset.t);try{history.replaceState(null,"","#"+b.dataset.t)}catch(e){}window.scrollTo({top:0,behavior:"smooth"});}));
-const h0=(location.hash||"").slice(1);if(["ov","rec","slp","str"].includes(h0))show(h0);
+const h0=(location.hash||"").slice(1);if(h0==="cmp"){show("ov");if(hasP)setView("cmp");}else if(["ov","rec","slp","str"].includes(h0))show(h0);
 requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll(".arc").forEach(a=>a.style.strokeDashoffset=a.dataset.off)));
 </script></body></html>
