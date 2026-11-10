@@ -160,9 +160,9 @@ svg.ch text{font-family:var(--mono)}
   <div class="rows" id="lStr"></div>
 </section>
 <script>
-const D=[{"date": "11-02", "rec": 62, "zone": "y", "strain": 5.0, "slp": 73, "rhr": 65, "hrv": 47.2, "spo2": 94.8, "sh": 9.34, "eff": 84.5}, {"date": "11-03", "rec": 70, "zone": "g", "strain": 16.0, "slp": 63, "rhr": 61, "hrv": 54.3, "spo2": 94.2, "sh": 6.23, "eff": 83.4}, {"date": "11-04", "rec": 61, "zone": "y", "strain": 4.2, "slp": 71, "rhr": 61, "hrv": 48.3, "spo2": 95.0, "sh": 6.63, "eff": 89.0}, {"date": "11-05", "rec": 83, "zone": "g", "strain": 6.2, "slp": 63, "rhr": 60, "hrv": 56.7, "spo2": 92.1, "sh": 7.24, "eff": 82.2}, {"date": "11-06", "rec": 72, "zone": "g", "strain": 12.1, "slp": 76, "rhr": 61, "hrv": 53.8, "spo2": 94.9, "sh": 7.35, "eff": 89.9}, {"date": "11-07", "rec": 25, "zone": "r", "strain": 7.9, "slp": 41, "rhr": 73, "hrv": 34.4, "spo2": 95.3, "sh": 5.19, "eff": 84.9}, {"date": "11-08", "rec": 16, "zone": "r", "strain": 7.2, "slp": 33, "rhr": 75, "hrv": 36.6, "spo2": 94.2, "sh": 8.54, "eff": 61.3}];
-const RANGE="2026-11-02 ~ 2026-11-08 · 共 7 天";
-const P=[{"date": "10-28", "rec": 24, "zone": "r", "strain": 12.1, "slp": 73, "rhr": 78, "hrv": 27.5, "spo2": 92.2, "sh": 6.39, "eff": 91.9}, {"date": "10-29", "rec": 54, "zone": "y", "strain": 4.3, "slp": 80, "rhr": 64, "hrv": 46.0, "spo2": 96.0, "sh": 6.49, "eff": 94.3}, {"date": "10-30", "rec": 57, "zone": "y", "strain": 12.6, "slp": 73, "rhr": 63, "hrv": 50.2, "spo2": 95.2, "sh": 5.63, "eff": 88.5}, {"date": "10-31", "rec": 83, "zone": "g", "strain": 13.0, "slp": 79, "rhr": 58, "hrv": 65.5, "spo2": 90.2, "sh": 6.35, "eff": 92.7}, {"date": "11-01", "rec": 72, "zone": "g", "strain": 6.9, "slp": 81, "rhr": 60, "hrv": 54.6, "spo2": 94.3, "sh": 9.81, "eff": 89.7}];
+const D=[{"date": "11-03", "rec": 70, "zone": "g", "strain": 16.0, "slp": 63, "rhr": 61, "hrv": 54.3, "spo2": 94.2, "sh": 6.23, "eff": 83.4}, {"date": "11-04", "rec": 61, "zone": "y", "strain": 4.2, "slp": 71, "rhr": 61, "hrv": 48.3, "spo2": 95.0, "sh": 6.63, "eff": 89.0}, {"date": "11-05", "rec": 83, "zone": "g", "strain": 6.2, "slp": 63, "rhr": 60, "hrv": 56.7, "spo2": 92.1, "sh": 7.24, "eff": 82.2}, {"date": "11-06", "rec": 72, "zone": "g", "strain": 12.1, "slp": 76, "rhr": 61, "hrv": 53.8, "spo2": 94.9, "sh": 7.35, "eff": 89.9}, {"date": "11-07", "rec": 25, "zone": "r", "strain": 7.9, "slp": 41, "rhr": 73, "hrv": 34.4, "spo2": 95.3, "sh": 5.19, "eff": 84.9}, {"date": "11-08", "rec": 16, "zone": "r", "strain": 7.2, "slp": 33, "rhr": 75, "hrv": 36.6, "spo2": 94.2, "sh": 8.54, "eff": 61.3}, {"date": "11-09", "rec": 41, "zone": "y", "strain": 5.3, "slp": 71, "rhr": 64, "hrv": 37.9, "spo2": 94.3, "sh": 6.1, "eff": 85.7}];
+const RANGE="2026-11-03 ~ 2026-11-09 · 共 7 天";
+const P=[{"date": "10-28", "rec": 24, "zone": "r", "strain": 12.1, "slp": 73, "rhr": 78, "hrv": 27.5, "spo2": 92.2, "sh": 6.39, "eff": 91.9}, {"date": "10-29", "rec": 54, "zone": "y", "strain": 4.3, "slp": 80, "rhr": 64, "hrv": 46.0, "spo2": 96.0, "sh": 6.49, "eff": 94.3}, {"date": "10-30", "rec": 57, "zone": "y", "strain": 12.6, "slp": 73, "rhr": 63, "hrv": 50.2, "spo2": 95.2, "sh": 5.63, "eff": 88.5}, {"date": "10-31", "rec": 83, "zone": "g", "strain": 13.0, "slp": 79, "rhr": 58, "hrv": 65.5, "spo2": 90.2, "sh": 6.35, "eff": 92.7}, {"date": "11-01", "rec": 72, "zone": "g", "strain": 6.9, "slp": 81, "rhr": 60, "hrv": 54.6, "spo2": 94.3, "sh": 9.81, "eff": 89.7}, {"date": "11-02", "rec": 62, "zone": "y", "strain": 5.0, "slp": 73, "rhr": 65, "hrv": 47.2, "spo2": 94.8, "sh": 9.34, "eff": 84.5}];
 const $=id=>document.getElementById(id);
 const cv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const COL={g:cv('--g'),y:cv('--y'),r:cv('--r'),n:cv('--tx3'),strain:cv('--strain'),sleep:cv('--sleep'),hrv:cv('--hrv'),rhr:cv('--rhr'),tx2:cv('--tx2'),tx3:cv('--tx3')};
@@ -184,6 +184,7 @@ const A={rec:avg(D.map(d=>d.rec)),str:avg(D.map(d=>d.strain)),slp:avg(D.map(d=>d
 const pick=(k,f)=>{const a=D.filter(d=>ok(d[k]));return a.length?a.reduce((x,y)=>f(y[k],x[k])?y:x):null};
 const best=pick("rec",(a,b)=>a>b),worst=pick("rec",(a,b)=>a<b),maxS=pick("strain",(a,b)=>a>b);
 const cnt=z=>D.filter(d=>d.zone===z).length;
+const corr=k=>{const p=D.filter(d=>ok(d.rec)&&ok(d[k]));if(p.length<4)return null;const mx=avg(p.map(d=>d.rec)),my=avg(p.map(d=>d[k]));let sxy=0,sxx=0,syy=0;p.forEach(d=>{const u=d.rec-mx,v=d[k]-my;sxy+=u*v;sxx+=u*u;syy+=v*v});return sxx&&syy?sxy/Math.sqrt(sxx*syy):null;};
 const wz=zoneOf(A.rec),WC=COL[wz==="n"?"g":wz];
 document.documentElement.style.setProperty('--glow',rgb(WC));
 
@@ -212,11 +213,10 @@ $("chips").innerHTML=[["g","绿区"],["y","黄区"],["r","红区"]].map(([z,t])=
 /* 概览：本周小结（全部按当周数据生成） */
 (function(){const L=[],n=v=>`<span class="num">${v}</span>`;
  if(best&&worst)L.push(`最佳 <b>${best.wd} ${best.md}</b>，恢复 ${n(best.rec+"%")}；最差 <b>${worst.wd} ${worst.md}</b>，${n(worst.rec+"%")}。`);
- const a=D.filter(d=>ok(d.sh)&&ok(d.rec)),hi=a.filter(d=>d.sh>=7),lo=a.filter(d=>d.sh<7);
- if(hi.length&&lo.length)L.push(`睡满 7 小时的 ${n(hi.length)} 天，平均恢复 ${n(r0(avg(hi.map(d=>d.rec)))+"%")}；不足 7 小时的 ${n(lo.length)} 天，平均 ${n(r0(avg(lo.map(d=>d.rec)))+"%")}。`);
- else if(a.length)L.push(hi.length?`本周每天都睡满了 7 小时，平均 ${n(hm(A.sh))}。`:`本周没有一天睡满 7 小时，平均只有 ${n(hm(A.sh))}。`);
+ const sN=D.filter(d=>ok(d.sh)).length,sG=D.filter(d=>ok(d.sh)&&d.sh>=7).length;
+ if(sN)L.push(`平均睡眠 ${n(hm(A.sh))}，${n(sG+"/"+sN)} 天睡满 7 小时。`);
  if(maxS)L.push(`负荷最高在 <b>${maxS.wd} ${maxS.md}</b>（${n(f1(maxS.strain))}，${lvl(maxS.strain)}），日均 ${n(f1(A.str))}。`);
- const hv=D.map(d=>d.hrv).filter(ok);if(hv.length>1)L.push(`HRV 在 ${n(Math.round(Math.min(...hv))+"–"+Math.round(Math.max(...hv)))} ms 之间波动，均值 ${n(r0(A.hrv))} ms。`);
+ const hv=D.map(d=>d.hrv).filter(ok);if(hv.length>1)L.push(`HRV 在 ${n(Math.round(Math.min(...hv))+"–"+Math.round(Math.max(...hv)))} ms 之间波动，均值 ${n(r0(A.hrv))} ms${(()=>{const r=corr("hrv");return r!=null&&Math.abs(r)>=.6?"，和每天的恢复度基本同步（相关性 "+n(r.toFixed(2))+"）":""})()}。`);
  $("ins").innerHTML=L.map(x=>`<li>${x}</li>`).join("");})();
 
 /* 分页头部 */
@@ -275,13 +275,19 @@ rows("lRec",d=>({fill:ok(d.rec)?`<i style="width:${d.rec}%;background:${COL[d.zo
 rows("lSlp",d=>({fill:ok(d.sh)?`<i style="width:${Math.min(100,d.sh/10*100)}%;background:${d.sh>=7?COL.sleep:rgba(COL.sleep,.42)}"></i>`:"",goal:`<span class="goal" style="left:70%"></span>`,c:ok(d.sh)&&d.sh>=7?"#fff":COL.tx2,v:hm(d.sh),sub:`表现 ${r0(d.slp)}% · 效率 ${r0(d.eff)}%`}));
 rows("lStr",d=>({fill:ok(d.strain)?`<i style="width:${Math.min(100,d.strain/21*100)}%;background:linear-gradient(90deg,${rgba(COL.strain,.45)},${COL.strain})"></i>`:"",c:"#fff",v:f1(d.strain),sub:ok(d.strain)?`${lvl(d.strain)} · 恢复 ${r0(d.rec)}%`:"—"}));
 
-/* 恢复点评 */
-(function(){const low=D.filter(d=>ok(d.sh)&&d.sh<7).length,n=v=>`<span class="num">${v}</span>`;let c;
- if(low>=Math.ceil(N/2))c=`本周有 ${n(low)} 天睡不足 7 小时，睡眠不足是拉低恢复的主因`;
- else if(ok(A.hrv)&&A.hrv<45)c=`本周 HRV 平均偏低（${n(r0(A.hrv))} ms），身体压力偏大`;
- else if(ok(A.rhr)&&A.rhr>58)c=`本周静息心率偏高（${n(r0(A.rhr))} bpm），多为疲劳或负荷偏大`;
- else c=`本周各项基本在正常区间，恢复相对稳定`;
- $("nRec").innerHTML=`<span class="t">点评</span><span>${c}。${low>0?"把“睡满 7h + 作息规律”做稳，是最直接的提升点。":"保持当前作息，留意 HRV 别往下掉。"}</span>`;})();
+/* 恢复点评：按当周数据说话（HRV 为主） */
+(function(){const n=v=>`<span class="num">${v}</span>`,rH=corr("hrv"),rR=corr("rhr"),dn=d=>d.wd+" "+d.md;
+ const hv=D.filter(d=>ok(d.hrv)&&ok(d.rec));let c;
+ if(hv.length>=4){
+  const hi=hv.reduce((x,y)=>y.hrv>x.hrv?y:x),lo=hv.reduce((x,y)=>y.hrv<x.hrv?y:x);
+  const ex=`HRV 最高的 <b>${dn(hi)}</b>（${n(r0(hi.hrv)+" ms")}）恢复 ${n(hi.rec+"%")}，最低的 <b>${dn(lo)}</b>（${n(r0(lo.hrv)+" ms")}）恢复 ${n(lo.rec+"%")}`;
+  if(rH!=null&&Math.abs(rH)>=.6)c=`本周恢复和 <b>HRV</b> 基本同步（相关性 ${n(rH.toFixed(2))}）：${ex}。HRV 偏低的日子，可以回看前一晚的酒精、晚餐、压力和睡眠环境。`;
+  else if(rR!=null&&Math.abs(rR)>=.6)c=`本周恢复和<b>静息心率</b>更同步（相关性 ${n(rR.toFixed(2))}），HRV 的影响没那么明显：${ex}。`;
+  else c=`本周恢复和 HRV、静息心率都没有明显同步，可能是多个因素叠加：${ex}。`;
+ }else c="本周数据不足，暂时无法判断恢复的主要驱动因素。";
+ const vl=D.filter(d=>ok(d.sh)&&d.sh<4);
+ if(vl.length)c+=` 另外 ${vl.map(dn).join("、")} 睡眠不足 4 小时，睡得过少时恢复会被额外拉低。`;
+ $("nRec").innerHTML=`<span class="t">点评</span><span>${c}</span>`;})();
 
 /* 周对比 */
 const hasP=Array.isArray(P)&&P.length>=3;
